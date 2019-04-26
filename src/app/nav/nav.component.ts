@@ -24,10 +24,10 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     if (this.loggedIn()) {
       this.setUser();
+      this.authService.currentPhotoUrl.subscribe(x => {
+        this.user.photoUrl = x;
+      });
     }
-    this.authService.currentPhotoUrl.subscribe(x => {
-      this.user.photoUrl = x;
-    });
   }
 
   login() {
