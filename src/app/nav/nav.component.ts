@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-nav',
@@ -12,26 +13,27 @@ export class NavComponent implements OnInit {
 
   model: any = {};
 
-  username: string;
+  user: User;
 
-  constructor(private authService: AuthService, private alertify: AlertifyService, private router: Router) {
-    this.username = '';
-  }
+  constructor(private authService: AuthService, private alertify: AlertifyService, private router: Router) { }
 
-  private setUsername() {
-    this.username = this.authService.decodedToken.unique_name;
+  private setUser() {
+    this.user = this.authService.currentUser;
   }
 
   ngOnInit() {
     if (this.loggedIn()) {
-      this.setUsername();
+      this.setUser();
     }
+    this.authService.currentPhotoUrl.subscribe(x => {
+      this.user.photoUrl = x;
+    });
   }
 
   login() {
     this.authService.login(this.model).subscribe(x => {
       this.alertify.success('Logged in successfully.');
-      this.setUsername();
+      this.setUser();
       this.router.navigate(['/members']);
     }, error => {
       this.alertify.error(error);
@@ -43,7 +45,7 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.alertify.message('Logged out');
     this.router.navigate(['/']);
   }

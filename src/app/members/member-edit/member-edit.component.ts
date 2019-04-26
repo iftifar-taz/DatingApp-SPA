@@ -24,6 +24,9 @@ export class MemberEditComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.user = data.user;
     });
+    this.authService.currentPhotoUrl.subscribe(x => {
+      this.user.photoUrl = x;
+    });
   }
 
   upadteUser() {
@@ -37,7 +40,7 @@ export class MemberEditComponent implements OnInit {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification(event: any) {
-    if(this.editForm.dirty){
+    if (this.editForm.dirty) {
       event.returnValue = true;
     }
   }
