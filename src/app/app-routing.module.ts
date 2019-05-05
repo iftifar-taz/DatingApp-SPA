@@ -14,6 +14,7 @@ import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.gu
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { ListsResolver } from './_resolvers/lists.resolver';
 
 const routes: Routes = [
   {
@@ -58,7 +59,10 @@ const routes: Routes = [
       },
       {
         path: 'lists',
-        component: ListsComponent
+        component: ListsComponent,
+        resolve: {
+          users: ListsResolver
+        }
       }
     ]
   },
